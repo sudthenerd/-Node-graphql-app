@@ -3,6 +3,62 @@ import { GraphQLServer } from 'graphql-yoga';
 // const { GraphQLServer } = require('graphql-yoga')
 
 // String, Boolean, Int, Float, ID.
+
+// Demo Data
+
+const sites = [
+    {
+        id: '123',
+        name: 'E-Governance',
+        logo: 'site-logo.jpg',
+        defaultLanguage: 'en',
+        pageNames: [
+            'Home', 'Education', 'Policy'
+        ]
+    },
+    {
+        id: '1234',
+        name: 'Medical',
+        logo: 'site-logo.jpg',
+        defaultLanguage: 'en',
+        pageNames: [
+            'Home', 'Education', 'Policy'
+        ]
+    }
+];
+
+const pages = [
+    {
+        id: '1',
+        title: 'Home Page',
+        metaDescription: null,
+        metaKeyword: 'E-governance',
+        metaRobots: null,
+        routePath: 'home',
+        isDefault: true,
+        site: '123'
+    },
+    {
+        id: '2',
+        title: 'Education Page',
+        metaDescription: null,
+        metaKeyword: 'E-governance',
+        metaRobots: null,
+        routePath: 'home',
+        isDefault: true,
+        site: '123'
+    },
+    {
+        id: '3',
+        title: 'Policy Page',
+        metaDescription: null,
+        metaKeyword: 'E-governance',
+        metaRobots: null,
+        routePath: 'home',
+        isDefault: true,
+        site: '123'
+    }
+];
  
 // Type Definitions (Schemas)
 const typeDefs = `
@@ -14,6 +70,7 @@ const typeDefs = `
         about: String!
         site: Site!
         page: Page!
+        sites: [Site!]!
         pages(pageId: String): [Page!]!
     }
 
@@ -33,6 +90,7 @@ const typeDefs = `
         metaRobots: String
         routePath: String!
         isDefault: Boolean!
+        site: Site
     }
 
     type Language {
@@ -56,51 +114,26 @@ const resolvers = {
             }
         },
 
+        sites() {
+            return sites;
+        },
+
         page() {
             return {
-                id: '1',
+                id: '123',
                 title: 'Home Page Title',
                 metaDescription: null,
                 metaKeyword: 'E-governance',
                 metaRobots: null,
                 routePath: 'home',
                 isDefault: true,
+                site: '123'
             }
         },
 
         pages(parent, args) {
-            const page = [
-                {
-                    id: '1',
-                    title: 'Home Page',
-                    metaDescription: null,
-                    metaKeyword: 'E-governance',
-                    metaRobots: null,
-                    routePath: 'home',
-                    isDefault: true,
-                },
-                {
-                    id: '2',
-                    title: 'Education Page',
-                    metaDescription: null,
-                    metaKeyword: 'E-governance',
-                    metaRobots: null,
-                    routePath: 'home',
-                    isDefault: true,
-                },
-                {
-                    id: '3',
-                    title: 'Policy Page',
-                    metaDescription: null,
-                    metaKeyword: 'E-governance',
-                    metaRobots: null,
-                    routePath: 'home',
-                    isDefault: true,
-                }
-            ];
-
             if (args.pageId) {
-                return page.filter((page) => {
+                return pages.filter((page) => {
                     return page.id === args.pageId;
                 });
             } else {
@@ -130,6 +163,14 @@ const resolvers = {
 
         about() {
             return 'IT Service Provider Firm'
+        }
+    },
+    Page: {
+        site(parent, args, ctx, info) {
+            return sites.find((site) => {
+                console.log(site.id, parent.site)
+                return site.id === parent.site;
+            })
         }
     }
 }
@@ -165,3 +206,14 @@ server.start(() => {
 //     title
 //   }
 // }
+
+// query {
+//     page {
+//       id
+//       title
+//       site {
+//         id
+//         name
+//       }
+//     }
+//   }

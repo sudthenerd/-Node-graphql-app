@@ -100,7 +100,7 @@ const resolvers = {
             ];
 
             if (args.pageId) {
-                return page.find((page) => {
+                return page.filter((page) => {
                     return page.id === args.pageId;
                 });
             } else {

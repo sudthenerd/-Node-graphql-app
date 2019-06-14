@@ -142,3 +142,26 @@ const server = new GraphQLServer({
 server.start(() => {
      console.log('Server started at localhost: 4000')
 })
+
+
+// # Write your query or mutation here
+// query {
+//   message:hello(name: "to 1Rivet")
+//   add(number1: 1, number2: 0)
+//   orgName:org
+//   place
+//   about
+//   site {
+//     name
+//     logo
+//     defaultLanguage
+//     pageNames
+//   }
+//   page {
+//     id
+//     title
+//   }
+//   pages(pageId: "1") {
+//     title
+//   }
+// }
